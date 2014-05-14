@@ -1,0 +1,8 @@
+.*swp
+*.pyc
+*.pyo
+*.pdf
+.DS_Store
+__pycache__
+*.egg-info
+tmp/
