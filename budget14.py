@@ -23,6 +23,9 @@ def main():
         data = requests.get(index_uri).content
         et = etree.parse(BytesIO(data))
         for elem in et.xpath('//a[contains(@href, ".pdf")]'):
+            href = elem.get('href')
+            if href.find('consolidated') == -1:
+                continue
             idx = len(pdfs)
             pdf = os.path.join(tmpdir, '%d.pdf' % (idx))
             pdfs.append(pdf)
@@ -31,7 +34,7 @@ def main():
                 print("skipping %d, already down..." % (idx))
                 continue
             print("getting:", pdf)
-            req = requests.get(urljoin(index_uri, elem.get('href')), stream=True)
+            req = requests.get(urljoin(index_uri, href), stream=True)
             with open(tmpf, 'wb') as fd:
                 for data in req.iter_content(chunk_size):
                     fd.write(data)
